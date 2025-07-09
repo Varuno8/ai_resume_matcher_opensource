@@ -8,7 +8,11 @@ from .providers.openai import OpenAIProvider, OpenAIEmbeddingProvider
 
 
 class AgentManager:
-    def __init__(self, strategy: str | None = None, model: str = "gemma3:4b") -> None:
+    def __init__(
+        self,
+        strategy: str | None = None,
+        model: str = os.getenv("OLLAMA_MODEL", "gemma3:4b"),
+    ) -> None:
         match strategy:
             case "md":
                 self.strategy = MDWrapper()

@@ -71,6 +71,18 @@ If you have any suggestions or feature requests, please feel free to open an iss
 
 Follow the instructions in the [SETUP.md](SETUP.md) file to set up the project locally. The setup script will install all the necessary dependencies and configure your environment.
 
+By default the setup pulls the `gemma3:4b` model. To use a different model set
+the `OLLAMA_MODEL` environment variable or pass `--ollama-model <model>` to
+`setup.sh`. You can also skip downloading a model altogether with
+`--skip-model-download` if you already have it installed.
+
+Example for using `llama3.2:latest` without downloading:
+
+```bash
+./setup.sh --ollama-model llama3.2:latest --skip-model-download
+npm run dev
+```
+
 The project is built using:
 
 - FastAPI for the backend.
@@ -78,8 +90,6 @@ The project is built using:
 - Ollama for local AI model serving.
 - Tailwind CSS for styling.
 - SQLite for the database.
-
-create a markdown table
 
 | Technology   | Info/Version                               |
 |--------------|---------------------------------------|

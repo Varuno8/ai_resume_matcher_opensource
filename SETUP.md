@@ -13,7 +13,7 @@ This document provides cross-platform instructions to get the project up and run
 chmod +x setup.sh
 
 # 2. Configure your environment and install dependencies
-./setup.sh
+./setup.sh [--ollama-model <model>] [--skip-model-download]
 
 # 3. (Optional) Start the development server
 ./setup.sh --start-dev
@@ -21,6 +21,11 @@ chmod +x setup.sh
 make setup
 make run-dev
 ```
+
+### Additional options
+
+- `--ollama-model <model>` — override the default model (`gemma3:4b`)
+- `--skip-model-download` — don't pull the model if it's already installed
 
 ---
 
@@ -96,7 +101,7 @@ You can customize any variables in these files before or after bootstrapping.
    This will:
 
    - Verify/install prerequisites (`node`, `npm`, `python3`, `pip3`, `uv`, `ollama`)
-   - Pull the `gemma3:4b` model via Ollama
+   - Pull the model specified by `--ollama-model` (default `gemma3:4b`) via Ollama
    - Bootstrap root & backend `.env` files
    - Install Node.js deps (`npm ci`) at root and frontend
    - Sync Python deps in `apps/backend` via `uv sync`

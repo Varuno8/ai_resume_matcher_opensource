@@ -4,7 +4,7 @@
 # setup.sh - cross-platform setup for Resume Matcher
 #
 # Usage:
-#   ./setup.sh [--help] [--start-dev]
+#   ./setup.sh [--help] [--start-dev] [--ollama-model <model>] [--skip-model-download]
 #
 # Requirements:
 #   • Bash 4.4+ (for associative arrays)
@@ -29,15 +29,17 @@ esac
 #–– CLI help ––#
 usage() {
   cat <<EOF
-Usage: $0 [--help] [--start-dev]
+Usage: $0 [--help] [--start-dev] [--ollama-model <model>] [--skip-model-download]
 
 Options:
-  --help       Show this help message and exit
-  --start-dev  After setup completes, start the dev server (with graceful SIGINT handling)
+  --help                 Show this help message and exit
+  --start-dev            After setup completes, start the dev server (with graceful SIGINT handling)
+  --ollama-model <model> Model to use with Ollama (default: gemma3:4b)
+  --skip-model-download  Skip pulling the model via Ollama
 
 This script will:
   • Verify required tools: node, npm, python3, pip3, uv
-  • Install Ollama & pull gemma3:4b model
+  • Install Ollama & pull the specified model (default gemma3:4b)
   • Install root dependencies via npm ci
   • Bootstrap both root and backend .env files
   • Bootstrap backend venv and install Python deps via uv
@@ -46,12 +48,36 @@ EOF
 }
 
 START_DEV=false
-if [[ "${1:-}" == "--help" ]]; then
-  usage
-  exit 0
-elif [[ "${1:-}" == "--start-dev" ]]; then
-  START_DEV=true
-fi
+MODEL="gemma3:4b"
+SKIP_MODEL_DOWNLOAD=false
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --help)
+      usage
+      exit 0
+      ;;
+    --start-dev)
+      START_DEV=true
+      shift
+      ;;
+    --ollama-model)
+      MODEL="$2"
+      shift 2
+      ;;
+    --skip-model-download)
+      SKIP_MODEL_DOWNLOAD=true
+      shift
+      ;;
+    *)
+      echo "Unknown option: $1" >&2
+      usage
+      exit 1
+      ;;
+  esac
+done
+
+export OLLAMA_MODEL="${OLLAMA_MODEL:-$MODEL}"
 
 #–– Logging helpers ––#
 info()    { echo -e "ℹ  $*"; }
@@ -120,12 +146,16 @@ if ! command -v ollama &> /dev/null; then
   success "Ollama installed"
 fi
 
-if ! ollama list | grep -q 'gemma3:4b'; then
-  info "Pulling gemma3:4b model…"
-  ollama pull gemma3:4b || error "Failed to pull gemma3:4b"
-  success "gemma3:4b model ready"
+if [[ "$SKIP_MODEL_DOWNLOAD" == false ]]; then
+  if ! ollama list | grep -q "$OLLAMA_MODEL"; then
+    info "Pulling $OLLAMA_MODEL model…"
+    ollama pull "$OLLAMA_MODEL" || error "Failed to pull $OLLAMA_MODEL"
+    success "$OLLAMA_MODEL model ready"
+  else
+    info "$OLLAMA_MODEL model already present—skipping"
+  fi
 else
-  info "gemma3:4b model already present—skipping"
+  info "Skipping model download as requested"
 fi
 
 #–– 3. Bootstrap root .env ––#
