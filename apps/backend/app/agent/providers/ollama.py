@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 class OllamaProvider(Provider):
     def __init__(
         self,
-        model_name: str = os.getenv("OLLAMA_MODEL", "gemma3:4b"),
+        model_name: str = os.getenv("OLLAMA_MODEL", "llama3.2:latest"),
         host: Optional[str] = None,
     ):
         self.model = model_name

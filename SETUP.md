@@ -22,9 +22,9 @@ make setup
 make run-dev
 ```
 
-### Additional options
+-### Additional options
 
-- `--ollama-model <model>` — override the default model (`gemma3:4b`)
+- `--ollama-model <model>` — override the default model (`llama3.2:latest`)
 - `--skip-model-download` — don't pull the model if it's already installed
 
 ---
@@ -101,7 +101,7 @@ You can customize any variables in these files before or after bootstrapping.
    This will:
 
    - Verify/install prerequisites (`node`, `npm`, `python3`, `pip3`, `uv`, `ollama`)
-   - Pull the model specified by `--ollama-model` (default `gemma3:4b`) via Ollama
+   - Pull the model specified by `--ollama-model` (default `llama3.2:latest`) via Ollama
    - Bootstrap root & backend `.env` files
    - Install Node.js deps (`npm ci`) at root and frontend
    - Sync Python deps in `apps/backend` via `uv sync`

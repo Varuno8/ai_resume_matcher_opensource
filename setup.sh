@@ -34,12 +34,12 @@ Usage: $0 [--help] [--start-dev] [--ollama-model <model>] [--skip-model-download
 Options:
   --help                 Show this help message and exit
   --start-dev            After setup completes, start the dev server (with graceful SIGINT handling)
-  --ollama-model <model> Model to use with Ollama (default: gemma3:4b)
+  --ollama-model <model> Model to use with Ollama (default: llama3.2:latest)
   --skip-model-download  Skip pulling the model via Ollama
 
 This script will:
   • Verify required tools: node, npm, python3, pip3, uv
-  • Install Ollama & pull the specified model (default gemma3:4b)
+  • Install Ollama & pull the specified model (default llama3.2:latest)
   • Install root dependencies via npm ci
   • Bootstrap both root and backend .env files
   • Bootstrap backend venv and install Python deps via uv
@@ -48,7 +48,7 @@ EOF
 }
 
 START_DEV=false
-MODEL="gemma3:4b"
+MODEL="llama3.2:latest"
 SKIP_MODEL_DOWNLOAD=false
 
 while [[ $# -gt 0 ]]; do
