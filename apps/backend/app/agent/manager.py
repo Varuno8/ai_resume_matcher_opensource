@@ -11,7 +11,7 @@ class AgentManager:
     def __init__(
         self,
         strategy: str | None = None,
-        model: str = os.getenv("OLLAMA_MODEL", "gemma3:4b"),
+        model: str = os.getenv("OLLAMA_MODEL", "llama3.2:latest"),
     ) -> None:
         match strategy:
             case "md":
